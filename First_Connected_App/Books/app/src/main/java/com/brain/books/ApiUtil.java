@@ -18,7 +18,7 @@ public class ApiUtil {
 
     //function that builds the complete URL
     public static URL buildURl(String title){
-        String fullURL = BASE_API_URL + "?=q" + title;
+        String fullURL = BASE_API_URL + "?q=" + title;
         URL url = null;
         try {
             url = new URL(fullURL);

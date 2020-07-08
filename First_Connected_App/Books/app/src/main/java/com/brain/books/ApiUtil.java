@@ -1,5 +1,6 @@
 package com.brain.books;
 
+import android.net.Uri;
 import android.util.Log;
 
 import java.io.IOException;
@@ -15,13 +16,20 @@ public class ApiUtil {
 
     //constant variable for url to the API
     public static final String BASE_API_URL = "https://www.googleapis.com/books/v1/volumes";
+    public static final String QUERY_PARAMETER_KEY = "q";
+    public static final String KEY = "key";
+    public static final String API_KEY = "AIzaSyARDxucdTP2EC-DifN3OJgCl5CA_5_VAus";
 
-    //function that builds the complete URL
+    //function that builds the completes URL
     public static URL buildURl(String title){
-        String fullURL = BASE_API_URL + "?q=" + title;
+
         URL url = null;
+        Uri uri = Uri.parse(BASE_API_URL).buildUpon()
+                .appendQueryParameter(QUERY_PARAMETER_KEY, title)
+                .appendQueryParameter(KEY, API_KEY)
+                .build();
         try {
-            url = new URL(fullURL);
+            url = new URL(uri.toString());
         }catch(Exception e){
             e.printStackTrace();
         }

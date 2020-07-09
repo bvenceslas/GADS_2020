@@ -1,6 +1,8 @@
 package com.brain.books;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,9 +15,11 @@ import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class BookListActivity extends AppCompatActivity {
     private ProgressBar mLoadingProgress;
+    private RecyclerView rvBooks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +27,11 @@ public class BookListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_book_list);
 
         mLoadingProgress = (ProgressBar)findViewById(R.id.pb_Loading);
+        rvBooks = (RecyclerView) findViewById(R.id.rv_books);
+        //LinearLayoutManager
+        LinearLayoutManager booksLayoutManager = new LinearLayoutManager(this,
+                LinearLayoutManager.VERTICAL, false);
+        rvBooks.setLayoutManager(booksLayoutManager);
 
         try {
             URL bookUrl = ApiUtil.buildURl("cooking"); //getting url with title 'cooking'
@@ -49,25 +58,29 @@ public class BookListActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
 
-            TextView tvResult = (TextView)findViewById(R.id.tvResponse);
+
             TextView tvError = (TextView)findViewById(R.id.tv_error);
+            mLoadingProgress.setVisibility(View.INVISIBLE );
 
             if(result == null){
-                tvResult.setVisibility(View.INVISIBLE);
+                rvBooks.setVisibility(View.INVISIBLE);
                 tvError.setVisibility(View.VISIBLE);
             }else{
-                tvResult.setVisibility(View.VISIBLE);
+                rvBooks.setVisibility(View.VISIBLE);
                 tvError.setVisibility(View.INVISIBLE);
             }
-            mLoadingProgress.setVisibility(View.INVISIBLE );
-            tvResult.setText(result);
+            ArrayList<Book> books = ApiUtil.getBooksFromJson(result);
+            String resultString = "";
+
+            //Using RecyclerView
+            BooksAdapter adapter = new BooksAdapter(books);
+            rvBooks.setAdapter(adapter);
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             mLoadingProgress.setVisibility(View.VISIBLE);
-
         }
     }
 }

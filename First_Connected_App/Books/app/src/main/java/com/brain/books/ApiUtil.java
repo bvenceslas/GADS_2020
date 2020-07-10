@@ -72,6 +72,7 @@ public class ApiUtil {
         final String PUBLISHER = "publisher";
         final String PUBLISHED_DATE = "publishedDate";
         final String ITEMS = "items";
+        final String DESCRIPTION = "description";
 
         final String VOLUMEINFO = "volumeInfo";
 
@@ -98,7 +99,8 @@ public class ApiUtil {
                         (volumeInfoJSON.isNull(SUBTITLE)?"":volumeInfoJSON.getString(SUBTITLE)),
                         authors,
                         volumeInfoJSON.getString(PUBLISHER),
-                        volumeInfoJSON.getString(PUBLISHED_DATE)
+                        volumeInfoJSON.getString(PUBLISHED_DATE),
+                        volumeInfoJSON.getString(DESCRIPTION)
                 );
                 books.add(book);
             }
